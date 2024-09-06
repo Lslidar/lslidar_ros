@@ -1,0 +1,9 @@
+<library path="lib/liblslidar_ch_driver_nodelet">
+  <class name="lslidar_ch_driver/LslidarChDriverNodelet"
+         type="lslidar_ch_driver::LslidarChDriverNodelet"
+         base_class_type="nodelet::Nodelet">
+    <description>
+      Publish one lslidar raw data packet each time.
+    </description>
+  </class>
+</library>

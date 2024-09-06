@@ -1,0 +1,31 @@
+<launch>
+    <arg name="device_ip" default="192.168.1.200"/> <!--雷达IP-->
+    <arg name="msop_port" default="2368" />         <!--雷达目的数据端口-->
+    <arg name="difop_port" default="2369" />        <!--雷达目的设备端口-->
+    <arg name="lidar_type" default="ch128x1"/> <!--雷达型号: cx1s3 cx6s3 ch16x1 ch64w cb64s1_a cx126s3 ch128x1 ch128s1 cx128s2 ch256-->
+    <arg name="use_time_service" default="false" /> <!--是否开启授时-->
+
+  <node pkg="lslidar_ch_driver" type="lslidar_ch_driver_node" name="lslidar_ch_driver_node" output="screen">
+    <!--param name="pcap" value="$(find lslidar_ch_driver)/pcap/xxx.pcap"/-->  <!--离线播pcap包路径-->
+    <param name="packet_rate" value="13475.0"/>     <!--离线播包每秒包数-->
+    <param name="lidar_type" value="$(arg lidar_type)"/>
+    <param name="lidar_ip" value="$(arg device_ip)"/>
+    <param name="msop_port" value="$(arg msop_port)" />
+    <param name="difop_port" value="$(arg difop_port)"/>
+    <param name="use_time_service" value="$(arg use_time_service)"/>
+    <param name="add_multicast" value="false"/>     <!--雷达是否启用组播模式-->
+    <param name="group_ip" value="224.1.1.2"/>      <!--组播IP-->
+    <param name="frame_id" value="laser_link"/>     <!--雷达点云坐标系ID-->
+    <Param name="pointcloud_topic" value="lslidar_point_cloud"/>  <!--点云话题名称-->
+    <param name="min_range" value="0.3"/>           <!--最小距离 小于此值的点将被过滤 可根据实际需求更改 单位:米-->
+    <param name="max_range" value="500.0"/>         <!--最大距离 大于此值的点将被过滤 可根据实际需求更改 单位:米-->
+    <param name="scan_start_angle" value="3000"/>   <!--最小角度 小于此值的点将被过滤 可根据实际需求更改 单位:0.01°-->
+    <param name="scan_end_angle" value="15000"/>    <!--最大角度 大于此值的点将被过滤 可根据实际需求更改 单位:0.01°-->
+    <param name="horizontal_angle_resolution" value="0.15"/> <!--laserscan角度分辨率,根据雷达型号修改-->
+    <param name="publish_laserscan" value="false"/> <!--是否发布laserscan-->
+    <param name="channel_num" value="64"/>          <!--laserscan线号-->
+    <param name="echo_mode" value="0"/> <!--双回波模式下生效 0:发布全部点云  1:发布第一次回波点云  2:发布第二次回波点云-->
+  </node>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find lslidar_ch_driver)/rviz/lslidar.rviz"/>
+</launch>
