@@ -1,0 +1,26 @@
+<launch>
+    <arg name="device_ip" default="192.168.1.200"/>     <!--雷达ip-->
+    <arg name="msop_port" default="2368"/>              <!--雷达目的数据端口-->
+    <arg name="difop_port" default="2369"/>             <!--雷达目的设备端口-->
+    <arg name="use_time_service" default="false"/>      <!--是否使用授时,false:使用系统时间-->
+    <arg name="packet_rate" default="22440.0"/>         <!--pcap每秒包数，离线解析pcap包时使用-->
+
+    <node pkg="lslidar_ls_driver" type="lslidar_ls_driver_node" name="lslidar_ls_driver_node" output="screen">
+        <!--param name="pcap" value="$(find lslidar_ls_driver)/pcap/xxx.pcap"/-->  <!--离线解析pcap包时取消此行注释-->
+        <param name="packet_rate" value="$(arg packet_rate)"/>
+        <param name="lidar_ip" value="$(arg device_ip)"/>
+        <param name="msop_port" value="$(arg msop_port)"/>
+        <param name="difop_port" value="$(arg difop_port)"/>
+        <param name="add_multicast" value="false"/>     <!--是否开启组播-->
+        <param name="group_ip" value="224.1.1.2"/>      <!--组播ip-->
+        <param name="min_range" value="0.5"/>           <!--雷达最小探测距离裁剪-->
+        <param name="max_range" value="300"/>           <!--雷达最大探测距离裁剪-->
+        <param name="scan_start_angle" value="-60"/>    <!--雷达最小探测角度裁剪-->
+    	<param name="scan_end_angle" value="60"/>       <!--雷达最小探测角度裁剪-->
+        <param name="frame_id" value="laser_link"/>     <!--点云帧id-->
+        <param name="pointcloud_topic" value="lslidar_point_cloud"/>    <!--点云话题名称-->
+        <param name="packet_loss" value="true"/>       <!--是否开启丢包检测-->
+        <param name="use_time_service" value="$(arg use_time_service)"/>
+    </node>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find lslidar_ls_driver)/rviz/lslidar_ls.rviz" output="screen"/>    <!--不启动rviz将此行注释-->
+</launch>
