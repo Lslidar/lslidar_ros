@@ -1,0 +1,49 @@
+<launch>
+    <arg name="device_ip1" default="192.168.1.200"/>
+    <arg name="msop_port1" default="2368"/>
+    <arg name="difop_port1" default="2369"/>
+    <arg name="device_ip2" default="192.168.1.201"/>
+    <arg name="msop_port2" default="2370"/>
+    <arg name="difop_port2" default="2371"/>
+    <arg name="packet_rate1" default="15000.0"/>
+    <arg name="packet_rate2" default="15000.0"/>
+    <arg name="use_time_service" default="false"/>
+
+    <node pkg="lslidar_ls_driver" type="lslidar_ls_driver_node" name="lslidar_ls_driver_node" output="screen" ns="LeftLidar">
+        <!--param name="pcap" value="$(find lslidar_driver)/pcap/xxx.pcap"/-->
+        <param name="packet_rate" value="$(arg packet_rate1)"/>
+        <param name="lidar_ip" value="$(arg device_ip1)"/>
+        <param name="msop_port" value="$(arg msop_port1)"/>
+        <param name="difop_port" value="$(arg difop_port1)"/>
+        <param name="add_multicast" value="false"/>
+        <param name="group_ip" value="224.1.1.2"/>
+        <param name="min_range" value="0.15"/>
+        <param name="max_range" value="1500.0"/>
+        <param name="scan_start_angle" value="-60"/>
+        <param name="scan_end_angle" value="60"/>
+        <param name="frame_id" value="laser_link"/>
+        <param name="pointcloud_topic" value="lslidar_point_cloud"/>
+        <param name="packet_loss" value="false"/>   <!--是否开启丢包检测-->
+        <param name="use_time_service" value="$(arg use_time_service)"/>
+    </node>
+
+    <node pkg="lslidar_ls_driver" type="lslidar_ls_driver_node" name="lslidar_ls_driver_node" output="screen" ns="RightLidar">
+        <!--param name="pcap" value="$(find lslidar_driver)/pcap/xxx.pcap"/-->
+        <param name="packet_rate" value="$(arg packet_rate2)"/>
+        <param name="lidar_ip" value="$(arg device_ip2)"/>
+        <param name="msop_port" value="$(arg msop_port2)"/>
+        <param name="difop_port" value="$(arg difop_port2)"/>
+        <param name="add_multicast" value="false"/>
+        <param name="group_ip" value="224.1.1.2"/>
+        <param name="use_time_service" value="$(arg use_time_service)"/>
+        <param name="min_range" value="0.15"/>
+        <param name="max_range" value="1500.0"/>
+        <param name="scan_start_angle" value="-60"/>
+        <param name="scan_end_angle" value="60"/>
+        <param name="frame_id" value="laser_link"/>
+        <param name="packet_loss" value="false"/>   <!--是否开启丢包检测-->
+        <param name="pointcloud_topic" value="lslidar_point_cloud"/>
+    </node>
+
+</launch>
+
